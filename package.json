@@ -26,7 +26,8 @@
     "react-redux": "^7.2.4",
     "react-redux-toastr": "^7.6.5",
     "redux-persist": "^6.0.0",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/react": "17.0.27",
