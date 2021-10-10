@@ -3,11 +3,12 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { reducer as toastrReducer } from "react-redux-toastr";
-
+import { reducer as SayurMayurReducer } from "states/SayurMayur/slice";
 // import { reducer as faqsReducer } from 'state/faqs/slice'
 
 const rootReducer = combineReducers({
   toastr: toastrReducer,
+  sayurMayur: SayurMayurReducer,
 });
 
 const persistConfig = {
