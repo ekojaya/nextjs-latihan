@@ -54,56 +54,9 @@ const Table = <TableData,>({
       case "TITLE":
         data = onTitleClick?.(id, name as string);
         break;
-      // case "ROOM NAME":
-      //   data = onTitleClick(id, name as string);
-      //   break;
-      // case "NAME":
-      //   data = onTitleClick(id, name as string);
-      //   break;
-      // case "START":
-      //   data = dayjs(name).format("DD/MM/YY HH:mm");
-      //   break;
-      // case "PUBLISH DATE":
-      //   data = name ? dayjs(name).format("DD/MM/YY HH:mm") : "-";
-      //   break;
-      // case "TYPE":
-      //   data = onTitleClick?.(id, name as string);
-      //   break;
-      // case "ACCOUNT TYPE":
-      //   data = DropdownStatus(id, label, name as string, rowData);
-      //   break;
-      // case "STATUS":
-      //   data = DropdownStatus(id, label, name as string);
-      //   break;
-      // case "LOCATION":
-      //   data = DropdownStatus(id, label, name as string);
-      //   break;
-      // case "SESSION":
-      //   data = DropdownStatus(id, label, name as string);
-      //   break;
-      // case "END":
-      //   data = dayjs(name).format("DD/MM/YY HH:mm");
-      //   break;
-      // case "SPEAKER(S)":
-      //   if (name === null) {
-      //     data = "";
-      //   } else {
-      //     let tempArray: any = [];
-      //     const nameAsArray = new Array(Object.values(name));
-      //     nameAsArray[0].map((item) => {
-      //       tempArray.push(item.fullname);
-      //     });
-      //     data = tempArray.join(";");
-      //   }
-      //   break;
-      // case "NO. OF SESSIONS":
-      //   const sessionLocation = Object.values(name);
-      //   data = sessionLocation[1];
-      //   break;
-      // case "POST OWNER":
-      //   let postOwner = JSON.parse(JSON.stringify(name));
-      //   data = postOwner?.username;
-      //   break;
+      case "STATUS":
+        data = DropdownStatus(id, label, name as string);
+        break;
       default:
         data = name;
         break;

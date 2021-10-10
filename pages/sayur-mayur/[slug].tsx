@@ -13,86 +13,101 @@ import {
 import Panel from "component/Molecules/Panel";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Table from "component/Molecules/Table/Table";
-import { IoMdTrash } from "react-icons/io";
-import { MdOutlineModeEdit } from "react-icons/md";
 import { useRouter } from "next/router";
 
-import { BsChevronRight } from "react-icons/bs";
 import { Form, Formik } from "formik";
 import TextInput from "component/Atoms/TextInput";
 import { isEmpty } from "lodash";
 import { isNil } from "lodash";
 import { object } from "yup";
-import { requiredString, requiredNumber } from "@/constants/validationSchema";
+import {
+  requiredString,
+  requiredNumber,
+  decimalNumber,
+} from "@/constants/validationSchema";
 import Select from "component/Atoms/Select";
+import { days, TypeQTYSelect } from "constants/dataDropdown";
+import { actions } from "@/states/SayurMayur/slice";
+import { useAppDispatch } from "hooks";
+import { TSayurMyurPayload } from "@/types/sayurMayur";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { shallowEqual, useSelector } from "react-redux";
+import { RootState } from "@/states/store";
 
 const validationSchema = object({
   productName: requiredString,
   typeQTY: requiredString,
-  QTY: requiredString,
-  price: requiredNumber,
+  QTY: decimalNumber,
+  priceBBS: requiredNumber,
+  pricePWT: requiredNumber,
+  // day: requiredString,
 });
-const DummyInitialValue = {
+const initialValues: TSayurMyurPayload = {
   productName: "",
   typeQTY: "",
-  QTY: "",
-  price: 0,
+  QTY: 0,
+  pricePWT: 0,
+  priceBBS: 0,
 };
-const TypeQTYSelect = [
-  {
-    label: "Kg",
-    value: "Kg",
-  },
-  {
-    label: "Pcs",
-    value: "Pcs",
-  },
-  {
-    label: "Pack",
-    value: "Pack",
-  },
-  {
-    label: "Ikat",
-    value: "Ikat",
-  },
-  {
-    label: "Biji",
-    value: "Biji",
-  },
-];
+
 const SayurMayur = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { slug } = router.query;
   const [titleName, setTitleName] = useState("New");
   const [isSubmitting, setSubmitting] = useState(false);
-  const [initialValues, setInitialValues] = useState(DummyInitialValue);
 
+  const { dataDetail, loading } = useSelector(
+    (state: RootState) => ({
+      dataDetail: state.sayurMayur.dataDetail,
+      loading: state.sayurMayur.loading,
+    }),
+    shallowEqual
+  );
+
+  // const [initialValues, setInitialValues] = useState(DummyInitialValue);
   useEffect(() => {
     if (slug !== "new" && slug !== undefined) {
       setTitleName("Edit");
+      dispatch(actions.getSyaurMayurById(slug as string));
     }
-  }, [slug]);
+  }, [slug, dispatch]);
   return (
     <Box minHeight="100vh" width="100%" padding="2rem 3rem" bg="grey.100">
-      <Heading as="h2" size="xl" fontWeight="extrabold">
-        {titleName} Sayur Mayur
-      </Heading>
+      <Stack direction="row" align="flex-start" width="full">
+        <Heading as="h2" size="xl" fontWeight="extrabold" width="90%">
+          {titleName} Sayur Mayur
+        </Heading>
+        <Link href={`/sayur-mayur`} passHref>
+          <Button marginLeft="1rem" width="10%" bgColor="green" color="white">
+            Back
+          </Button>
+        </Link>
+      </Stack>
+
       <Panel label="">
         <Formik
           enableReinitialize
           validationSchema={validationSchema}
-          initialValues={initialValues}
+          initialValues={slug === "new" ? initialValues : dataDetail}
           onSubmit={(values) => {
-            // setSubmitting(true);
-            // fetchMutationFeedback({
-            //   variables: {
-            //     setFeedbackInput: {
-            //       url: values.url,
-            //     },
-            //   },
-            // });
-            console.log("values", values);
+            setSubmitting(true);
+            // console.log("values", values);
+            if (slug === "new") {
+              dispatch(actions.addSayurMayur(values))
+                .then(unwrapResult)
+                .then(() => router.push("/sayur-mayur"));
+            } else {
+              dispatch(
+                actions.updateSayurMayur({
+                  id: slug as string,
+                  payload: values,
+                })
+              )
+                .then(unwrapResult)
+                .then(() => router.push("/sayur-mayur"));
+            }
+
             setSubmitting(false);
           }}
         >
@@ -119,18 +134,36 @@ const SayurMayur = () => {
                   bgColor="white"
                 />
                 <TextInput
-                  id="price"
-                  name="price"
-                  label="price"
-                  placeholder="price"
+                  id="priceBBS"
+                  name="priceBBS"
+                  label="price in BBS"
+                  placeholder="price in BBS"
                   type="number"
                 />
+                <TextInput
+                  id="pricePWT"
+                  name="pricePWT"
+                  label="price in PWT"
+                  placeholder="price in PWT"
+                  type="number"
+                />
+                {/* <Select
+                  id="day"
+                  name="day"
+                  label="day"
+                  placeholder="day"
+                  data={days.map((item) => ({
+                    label: item.name,
+                    value: item.name,
+                  }))}
+                  bgColor="white"
+                /> */}
               </Stack>
               <ButtonGroup mt="8">
                 <Button
                   bgColor="green"
                   color="white"
-                  isLoading={isSubmitting}
+                  isLoading={isSubmitting || loading}
                   type="submit"
                 >
                   Save Changes
@@ -138,7 +171,7 @@ const SayurMayur = () => {
                 <Button
                   onClick={() => resetForm()}
                   variant="outline"
-                  isLoading={isSubmitting}
+                  isLoading={isSubmitting || loading}
                   color="gray.500"
                   bg="white"
                 >
