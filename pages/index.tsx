@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box>
-        <Text>ini</Text>
+        <Text>ini 1</Text>
         <Button
           bgColor="green"
           color="white"
