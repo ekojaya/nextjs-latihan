@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
+    "deploy": "NODE_OPTIONS=--max_old_space_size=4096 next build && next export && firebase deploy --only hosting",
     "lint": "next lint"
   },
   "dependencies": {

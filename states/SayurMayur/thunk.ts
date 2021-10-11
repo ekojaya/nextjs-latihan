@@ -28,7 +28,7 @@ export const getListSayurMayur = createAsyncThunk(
       }
 
       return list;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }
@@ -41,7 +41,7 @@ export const addSayurMayur = createAsyncThunk(
       const snapShotRef = db.collection("sayur_Mayur").doc();
       await snapShotRef.set(payload);
       return toastr.success("", "success");
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }
@@ -57,7 +57,7 @@ export const getSyaurMayurById = createAsyncThunk(
         throw new Error("data not found");
       }
       return dataSsayurMayur.data() as TSayurMyur;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }
@@ -73,7 +73,7 @@ export const updateSayurMayur = createAsyncThunk(
       const snapShotRef = db.collection("sayur_Mayur").doc(id);
       await snapShotRef.update(payload);
       return toastr.success("", "success");
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }
@@ -86,7 +86,7 @@ export const removeSayurMayurById = createAsyncThunk(
       const snapShotRef = db.collection("sayur_Mayur").doc(id);
       await snapShotRef.delete();
       return;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }

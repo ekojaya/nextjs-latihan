@@ -1,13 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import { useTest } from "@/hooks/test";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const docId = "rtRTv07Cr5Lw6SfPKBHy";
   const { response } = useTest(docId);
   console.log("response", response);
+  const router = useRouter();
   return (
     <div>
       <Head>
@@ -17,6 +19,13 @@ const Home: NextPage = () => {
       </Head>
       <Box>
         <Text>ini</Text>
+        <Button
+          bgColor="green"
+          color="white"
+          onClick={() => router.push("/sayur-mayur")}
+        >
+          sayut Mayur
+        </Button>
       </Box>
     </div>
   );
